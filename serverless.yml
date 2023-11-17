@@ -25,7 +25,7 @@ provider:
         - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:eu-central-1:*:*'
   environment:
-    IS_OFFLINE: ${env.IS_OFFLINE}
+    IS_OFFLINE: ${env:IS_OFFLINE}
 
 custom:
   serverless-offline:
@@ -37,7 +37,7 @@ custom:
     start:
       docker: true
       port: 8010
-      inMemory: false
+      inMemory: true
       heapInitial: 200m
       heapMax: 1g
       migrate: true
@@ -59,6 +59,15 @@ functions:
       - httpApi:
           path: /${self:provider.stage}/hello
           method: GET
+  createUser:
+    handler: src/handlers/users/createUser.handler
+    description: ''
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/user
+          method: POST
+    environment:
+      TABLE_NAME_USERS: ${env:TABLE_NAME_USERS}
 
 
 resources:
