@@ -12,13 +12,13 @@ export interface StandardResponse {
 export const returnData = (
   statusCode: number,
   message: string,
-  data: Object
+  data?: Object
 ): StandardResponse => {
   const body: BodyDataIF = {
     message,
   };
 
-  if (Object.keys(data).length) {
+  if (data && Object.keys(data).length) {
     body.data = data;
   }
 
