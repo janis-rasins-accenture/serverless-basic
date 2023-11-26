@@ -12,6 +12,7 @@ provider:
   runtime: nodejs18.x
   stage: ${opt:stage, 'local'}
   region: ${env:REGION}
+  timeout: 30
   memorySize: 256
   iamRoleStatements:
     - Effect: Allow
@@ -23,7 +24,7 @@ provider:
         - dynamodb:PutItem
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
-      Resource: 'arn:aws:dynamodb:eu-central-1:*:*'
+      Resource: 'arn:aws:dynamodb:${env:REGION}:*:*'
   environment:
     IS_OFFLINE: ${env:IS_OFFLINE}
 
@@ -61,7 +62,7 @@ functions:
           method: GET
   createUser:
     handler: src/handlers/users/createUser.handler
-    description: ''
+    description: 'Create a single user'
     events:
       - httpApi:
           path: /${self:provider.stage}/user
