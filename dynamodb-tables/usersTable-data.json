@@ -2,6 +2,12 @@
     {
         "userId": {
             "S": "1"
+        },
+        "firstName": {
+            "S": "User"
+        },
+        "isActive": {
+            "N": "1"
         }
     },
     {
