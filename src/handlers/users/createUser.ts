@@ -39,6 +39,7 @@ export const handler = async (
       lastName: user.lastName,
       email: user.email,
       userName: user.userName,
+      avatarUrl: user.avatarUrl,
     },
   };
   try {
