@@ -25,8 +25,15 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: 'arn:aws:dynamodb:${env:REGION}:*:*'
+    - Effect: 'Allow'
+      Action:
+        - 'lambda:InvokeFunction'
+        - 'lambda:InvokeAsync'
+      Resource: '*'
   environment:
     IS_OFFLINE: ${env:IS_OFFLINE}
+    LAMBDA_ENDPOINT: ${env:LAMBDA_ENDPOINT}
+    LOCAL_LAMBDA_ENDPOINT: ${env:LOCAL_LAMBDA_ENDPOINT}
 
 custom:
   serverless-offline:
@@ -69,6 +76,15 @@ functions:
           method: POST
     environment:
       TABLE_NAME_USERS: ${env:TABLE_NAME_USERS}
+  importUsers:
+    handler: src/handlers/users/importUsers.handler
+    events:
+      - httpApi:
+          path: /${self:provider.stage}/users
+          method: POST
+    environment:
+      TABLE_NAME_USERS: ${env:TABLE_NAME_USERS}
+      LAMBDA_NAME_USERS_CREATED: ${self:app}-${self:provider.stage}-usersCreated
 
 
 resources:
