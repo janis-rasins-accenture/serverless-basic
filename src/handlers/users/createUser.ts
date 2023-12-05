@@ -1,9 +1,11 @@
 import { PutCommandInput } from '@aws-sdk/lib-dynamodb';
 import { APIGatewayEvent } from 'aws-lambda';
 import { v4 as uuidv4 } from 'uuid';
+import { ValidationError } from 'yup';
 import { CreateUserInputIF } from '../../types/users';
 import { putItem } from '../../aws/dynamodb/putItem';
 import { StandardResponse, returnData } from '../../utils/returnData';
+import { userCreateSchema } from './validation/usersValidation';
 
 export const handler = async (
   event: APIGatewayEvent
@@ -17,6 +19,16 @@ export const handler = async (
     return returnData(500, 'Internal server error');
   }
   const user: CreateUserInputIF = JSON.parse(event.body);
+
+  try {
+    await userCreateSchema.validate(user);
+  } catch (error) {
+    if (error instanceof ValidationError) {
+      return returnData(400, error.message);
+    }
+    return returnData(500, 'Internal server error', { error });
+  }
+
   const uuid = uuidv4();
   const params: PutCommandInput = {
     TableName: TABLE_NAME_USERS,
