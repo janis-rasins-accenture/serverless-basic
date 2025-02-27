@@ -7,7 +7,7 @@
     "dynamodb-local": "sls dynamodb start --seed=test -m",
     "dynamodb-admin:test": "cross-env DYNAMO_ENDPOINT=http://localhost:8010 AWS_REGION=eu-west-1 AWS_ACCESS_KEY_ID=fakeMyKeyId AWS_SECRET_ACCESS_KEY=fakeSecretAccessKey dynamodb-admin",
     "dynamodb-admin": "cross-env DYNAMO_ENDPOINT=http://localhost:8010 AWS_PROFILE=serverless-basic dynamodb-admin",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
